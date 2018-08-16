@@ -1,0 +1,15 @@
+.App {
+    text-align: center;
+    font-family: Roboto;
+}
+
+.header h1 {
+    font-weight: 500;
+    display: inline-block;
+}
+
+.header h2 {
+    font-weight: 300;
+    display: inline-block;
+    margin-left: 5px;
+}

@@ -1,0 +1,39 @@
+.Expenses,
+.Debt,
+.Emergency,
+.Retirement {
+    height: auto;
+    width: 300px;
+    margin: auto;
+    border-radius: 15px;
+    font-family: 'Roboto';
+    display: inline-block;
+    padding-bottom: 10px;
+}
+
+.BudgetCard h1 {
+    font-weight: 400;
+    font-size: 18px;
+    padding-top: 10px;
+}
+
+.BudgetCard h2 {
+    font-weight: 300;
+    font-size: 16px;
+}
+
+.Expenses {
+    background-color: #b66d85;
+}
+
+.Debt {
+    background-color: #f09850;
+}
+
+.Emergency {
+    background-color: #66976a;
+}
+
+.Retirement {
+    background-color: #cceeff;
+}

@@ -1,0 +1,10 @@
+.Flowchart>.Emergency,
+.Expenses,
+.Debt,
+.Retirement {
+    margin: 10px;
+}
+
+.BudgetCard {
+    display: inline-block;
+}
