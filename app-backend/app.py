@@ -14,7 +14,11 @@ def index():
     query = c.execute("SELECT * FROM users WHERE username = '%s'" % test_username).fetchall()
     if len(query) == 0:
         return redirect(url_for('createuser'))
-    query[0]
+    nessie_id = query[0][2]
+    fc = FlowChart(nessie_id)
+    fc.load_default()
+    fc.update_database()
+    query2 = c.execute("SELECT * FROM users WHERE username = '%s'" % test_username).fetchall()
     return "Hello World!"
 
 
