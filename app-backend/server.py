@@ -1,15 +1,15 @@
 from flask import Flask
-import urllib
+import requests
 app = Flask(__name__)
 
 
 @app.route("/")
 def hello():
-	print(urllib.request("http://www.mocky.io/v2/5b75c6932e00006200536216"))
-
+	# print(urllib.request("http://www.mocky.io/v2/5b75c6932e00006200536216"))
+	return "hello world"
 @app.route("/test")
 def test():
-	return urllib.request("http://www.mocky.io/v2/5b75c6932e00006200536216")
+	return requests.get("http://www.mocky.io/v2/5b75c6932e00006200536216").text
 
 
 
