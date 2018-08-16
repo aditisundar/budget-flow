@@ -2,8 +2,11 @@
 Data structure to hold flowchart and cards.
 """
 
+import requests
 from types import *
 
+NESSIE_API_KEY = "key=f040760c8a104373567ce4d254de3f5f"
+NESSIE_ROOT_URL = "http://api.reimaginebanking.com"
 
 USER_RENT = 10
 USER_HEALTHCARE = 10
@@ -178,6 +181,11 @@ class FlowChart:
         self.loans = [{'loan_remaining_amount': 20, 'minimum_payment': 10, 'ir': 0.03}]
 
 
+    def load_nessie_data(self):
+        """ Loads relevant data from Nessie."""
+        pass
+
+
     def load(self, card_details):
         """ Load a card into the flowchart. """
         if card_details['category'] == 'emergency':
@@ -201,3 +209,14 @@ class FlowChart:
 
 if __name__ == '__main__':
     fc = FlowChart("dummyId123")
+    c1 = "5b75e453322fa06b67793bfb"
+    c2 = "5b75e453322fa06b67793bfc"
+    c3 = "5b75e454322fa06b67793bfd"
+
+    a1 = "5b75e454322fa06b67793bfe"
+
+    r1 = requests.get(NESSIE_ROOT_URL + f"/customers/{c2}/accounts?" + NESSIE_API_KEY)
+    acc_id = r1.json()[0]["_id"]
+
+    r2 =  requests.get(NESSIE_ROOT_URL + f"/accounts/{acc_id}/loans" + NESSIE_API_KEY)
+    print(r2.text)

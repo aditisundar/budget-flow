@@ -1,8 +1,12 @@
+import sqlite3
 from flask import Flask
 app = Flask(__name__)
 
 
-# import integration.flowchart
+# Set up database.
+conn = sqlite3.connect('database.db')
+c = conn.cursor()
+
 
 # Main page. Flow chart goes.
 @app.route("/")
