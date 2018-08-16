@@ -1,5 +1,5 @@
 import sqlite3
-from flask import Flask
+from flask import Flask, session
 app = Flask(__name__)
 
 
@@ -8,11 +8,22 @@ conn = sqlite3.connect('database.db')
 c = conn.cursor()
 
 
-# Main page. Flow chart goes.
 @app.route("/")
-def hello():
-    # flow chart loading code goes here
+def index():
+    test_username = 'user2'
+    query = c.execute("SELECT * FROM users WHERE username = '%s'" % test_username).fetchall()
+    if len(query) == 0:
+        return redirect(url_for('createuser'))
+    query[0]
     return "Hello World!"
+
+
+@app.route("/createuser", methods=['GET', 'POST'])
+def create_user():
+    """ Creates user. """
+    if request.method == 'POST':
+        return redirect(url_for('index.html'))
+    return render_template('createuser.html')
 
 
 @app.route("/flowchart/<username>/<password>")
@@ -39,3 +50,7 @@ def stats(username, password, name):
     * Ex: If the name is 'Food', then this should return a boxplot summary of how much people from the same (location, income, etc.) as the user spend on food monthly.
     '''
     return ''
+
+
+if __name__ == '__main__':
+    index()
