@@ -18,7 +18,7 @@ def index():
     fc.load_default()
     fc.upsert_database()
     cardsObject = fc.front_end_json()
-    return "Hello World!"
+    return cardsObject
 
     # Code that should be run when editting one card
     #card_num = None
