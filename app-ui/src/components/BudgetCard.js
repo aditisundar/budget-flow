@@ -12,8 +12,8 @@ class BudgetCard extends Component {
             <div className='BudgetCard'>
                 <div className={this.props.category}>
                     <h1>{this.props.name}</h1>
-                    Budgeted<h2>${this.props.budgetted}</h2>
-                    Remaining<h2>${this.props.remaining}</h2>
+                    <h2>Budgeted: ${this.props.budgetted}</h2>
+                    <h2>Remaining: ${this.props.remaining}</h2>
                     <EditDialog num={this.props.num} updateCards={this.props.updateCards} name={this.props.name} />
                     <CompareDialog name={this.props.name} />
 
