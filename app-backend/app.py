@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import sqlite3
 from flask import Flask, session
 
@@ -56,21 +55,7 @@ def bot_backend():
     return fc.google_bot_json()
 
 
-if __name__ == '__main__':
-    index()
-=======
-from flask import Flask, request
-import requests, json
-import helper
-import dummy_data
-app = Flask(__name__)
-
-
-@app.route("/")
-def hello():
-    return "hello world"
-
-# test enpoint to make a get request to card and user information
+# test endpoint to make a get request to card and user information
 @app.route("/test")
 def test():
     return requests.post("http://www.mocky.io/v2/5b75c6932e00006200536216").text
@@ -134,5 +119,5 @@ def webhook():
     return json.dumps(toReturn)
 
 
-if __name__ == "__main__":
-    app.run(debug=True) # run this app
+if __name__ == '__main__':
+    index()
