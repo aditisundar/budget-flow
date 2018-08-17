@@ -132,12 +132,13 @@ def generateAverages(income, location):
     # individualDictionary contains a dictionary of filtered budgetProfiles
     range = 0.25
     optional = False
-    if(income == None) :
-         range = 15
-         income = 3000
-    if(location == None) :
-         optional = True
-    wholeArray = parseCSV2(float(income), str(location), data_csv2(), range, optional)
+    if(income == None):
+        range = 15
+        income = 3000
+    if(location == None):
+        optional = True
+    wholeArray = parseCSV2(float(income), str(location),
+                           data_csv2(), range, optional)
     averages = {}
     count = 0
 
