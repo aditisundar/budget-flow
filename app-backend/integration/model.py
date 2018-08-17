@@ -12,7 +12,7 @@ from sklearn.model_selection import train_test_split
 
 def preprocess_data():
     # Load and basic cleaning.
-    data = pd.read_csv('../../data/dummy_data.csv')
+    data = pd.read_csv('../data/dummy_data.csv')
     data = data.drop(['Unnamed: 0'], axis = 1)
     data = pd.concat([data, pd.get_dummies(pd.Series(data['zipcodes']))], axis=1).drop(['zipcodes'], axis=1)
 

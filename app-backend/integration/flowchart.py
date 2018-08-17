@@ -178,32 +178,27 @@ class FlowChart:
         monthly_hsa = 100
 
         # Get pre-populated/database budgetted numbers for each card.
-        # self.predict_using_model('food', self.salary, self.zipcode)
-        ml_food = 10
-        # self.predict_using_model('essentials', self.salary, self.zipcode)
-        ml_essentials = 10
-        # self.predict_using_model('IEE', self.salary, self.zipcode)
-        ml_iee = 10
+        ml_food = self.predict_using_model('food', self.salary, self.zipcode)
+        ml_essentials = self.predict_using_model('essentials', self.salary, self.zipcode)
+        ml_iee = self.predict_using_model('IEE', self.salary, self.zipcode)
         if is_first_time:
             self.budgetted = (monthly_rent, ml_food, ml_essentials, ml_iee,
-                              monthly_healthcare, 'minimums', max(1000, monthly_rent + ml_food +
-                                                                  ml_essentials + ml_iee + monthly_healthcare),
-                              ml_iee, monthly_era, 'hi_loans',
-                              3 * (monthly_rent + ml_food +
-                                   ml_essentials + ml_iee + monthly_healthcare),
-                              'mod_loans', 0, 0, 0, monthly_hsa, 0, 0)
+                                monthly_healthcare, 'minimums', max(1000, monthly_rent + ml_food +
+                                  ml_essentials + ml_iee + monthly_healthcare),
+                                ml_iee, monthly_era, 'hi_loans',
+                                3 * (monthly_rent + ml_food + ml_essentials + ml_iee + monthly_healthcare),
+                                'mod_loans', 0, 0, 0, monthly_hsa, 0, 0)
         else:
-            self.budgetted = db.execute(
-                "SELECT * FROM users WHERE nessieID = '%s'" % self.nessie_id).fetchall()[0][3:]
+            self.budgetted = db.execute("SELECT * FROM users WHERE nessieID = '%s'" % self.nessie_id).fetchall()[0][3:]
 
         self.current = self.salary
         self.chart = []
         self.get_nessie_data()
 
     def predict_using_model(self, key, income, zipcode):
-        model = keras.models.load_model(key + '.h5')
+        model = keras.models.load_model('integration/' + key + '.h5')
         mean, std = get_mean_std()[key]
-        return model.predict(pd.DataFrame([[(income - mean) / std, 0, 0, 1, 0, 0]])).flatten()[0]
+        return int(model.predict(pd.DataFrame([[(income - mean) / std, 0, 0, 1, 0, 0]])).flatten()[0].item())
 
     def get_nessie_data(self):
         """ Get loan and balance data from Nessie. """
@@ -211,8 +206,7 @@ class FlowChart:
                        'minimum_payment': 10, 'ir': random.uniform(0, 0.12)}]
 
         # Get accounts associated with customer. Also gets loan associated with each account.
-        rc = requests.get(
-            NESSIE_ROOT_URL + f"/customers/{self.nessie_id}/accounts?" + NESSIE_API_KEY)
+        rc = requests.get(NESSIE_ROOT_URL + f"/customers/{self.nessie_id}/accounts?" + NESSIE_API_KEY)
         self.original_checkings = 0
         self.original_savings = 0
         for acc in rc.json():
@@ -220,8 +214,7 @@ class FlowChart:
                 self.original_checkings += acc['balance']
             if acc['type'] == 'Savings':
                 self.original_savings += acc['balance']
-            rl = requests.get(
-                NESSIE_ROOT_URL + f"/accounts/{acc['_id']}/loans?" + NESSIE_API_KEY)
+            rl = requests.get(NESSIE_ROOT_URL + f"/accounts/{acc['_id']}/loans?" + NESSIE_API_KEY)
             for loan in rl.json():
                 self.loans.append(
                     {'loan_remaining_amount': loan['amount'], 'minimum_payment': loan['monthly_payment'], 'ir': random.uniform(0, 0.12)})
