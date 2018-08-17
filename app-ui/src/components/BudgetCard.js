@@ -9,14 +9,13 @@ import { TextField, Button, Dialog, DialogActions, DialogContent, DialogContentT
 class BudgetCard extends Component {
 
     render() {
-        console.log(this.props.category)
         return (
             <div className='BudgetCard'>
                 <div className={this.props.category}>
                     <h1>{this.props.name}</h1>
                     <h2>${this.props.budgetted}</h2>
                     <h2>${this.props.remaining}</h2>
-                    <EditDialog updateCards={this.props.updateCards} name={this.props.name} />
+                    <EditDialog num={this.props.num} updateCards={this.props.updateCards} name={this.props.name} />
                     <CompareDialog name={this.props.name} />
 
                 </div>
@@ -45,7 +44,7 @@ class EditDialog extends React.Component {
     };
 
     handleSubmit = () => {
-        this.props.updateCards(this.state.value);
+        this.props.updateCards(this.props.num, this.state.value);
         this.handleClose();
     };
 
@@ -73,11 +72,11 @@ class EditDialog extends React.Component {
                         />
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={this.handleClose} color="primary">
+                        <Button onClick={this.handleClose.bind(this)} color="primary">
                             Cancel
             </Button>
-                        <Button onClick={this.handleClose} color="primary">
-                            Subscribe
+                        <Button onClick={this.handleSubmit.bind(this)} color="primary">
+                            Submit
             </Button>
                     </DialogActions>
                 </Dialog>

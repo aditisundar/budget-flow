@@ -37,12 +37,14 @@ class App extends Component {
           location={this.state.location}
           budgetEntered={this.state.budgetEntered}
           handleChange={this.handleChange}
-          handleSubmit={this.handleSubmit} />
+          handleSubmit={this.handleSubmit}
+          updateCards={this.updateCards} />
         <Flowchart salary={this.state.salary}
           location={this.state.location}
           budgetEntered={this.state.budgetEntered}
           handleChange={this.handleChange}
-          handleSubmit={this.handleSubmit} />
+          handleSubmit={this.handleSubmit}
+          updateCards={this.updateCards} />
       </div>
     );
   }
