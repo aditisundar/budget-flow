@@ -3,6 +3,10 @@ from flask import Flask, session
 app = Flask(__name__)
 
 
+conn = sqlite3.connect('database.db')
+db = conn.cursor()
+
+
 @app.route("/")
 def index():
     test_nessie_id = '5b72dc8f322fa06b67793bb8'
@@ -15,6 +19,16 @@ def index():
     fc.upsert_database()
     cardsObject = fc.front_end_json()
     return "Hello World!"
+
+    # Code that should be run when editting one card
+    #card_num = None
+    #card_new_value = None
+    #db.execute("""UPDATE users SET %s = WHERE nessieID = %i""" % ('f' + str(card_num), card_new_value))
+    #fc = FlowChart(test_nessie_id, salary, zipcode, False)
+    #fc.load_default()
+    #fc.upsert_database()
+    #cardsObject = fc.front_end_json()
+
 
 
 @app.route("/<username>/<password>/name=<name>")
