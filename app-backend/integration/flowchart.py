@@ -297,3 +297,7 @@ class FlowChart:
 if __name__ == '__main__':
     fc = FlowChart("5b72dc8f322fa06b67793bb8", 10000, '02138', True)
     fc.load_default()
+<<<<<<< Updated upstream
+=======
+    # fc.upsert_database()
+>>>>>>> Stashed changes
