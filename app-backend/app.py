@@ -99,12 +99,13 @@ def returnBudgetArray(salary, location, category):
     test_nessie_id = '5b72dc8f322fa06b67793bb8'
 
     # individualDictionary contains a dictionary of filtered budgetProfiles
-    wholeArray = parseCSV(int(salary), str(location), data_csv(), 0.25, False)
+    wholeArray = parseCSV(int(salary), str(location), data_csv())
     numArray = []
 
     for individual in json.loads(wholeArray):
         # change the 0 to category when categoryArray is a dictionary
-        numArray.append(individual["categoryArray"][int(category)])
+        num = individual["categoryArray"][int(category)]
+        numArray.append(num)
 
     minVal = min(numArray)
     maxVal = max(numArray)
