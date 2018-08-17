@@ -98,15 +98,9 @@ def stats(username, password, name):
 def returnBudgetArray(salary, location, category):
     test_nessie_id = '5b72dc8f322fa06b67793bb8'
 
-<<<<<<< HEAD
-    ## individualDictionary contains a dictionary of filtered budgetProfiles
-    wholeArray = parseCSV(int(salary), str(location), data_csv(), 0.25, False)
-    numArray = [];
-=======
     # individualDictionary contains a dictionary of filtered budgetProfiles
     wholeArray = parseCSV(int(salary), str(location), data_csv(), 0.25, False)
     numArray = []
->>>>>>> 256f938265a8144c880ca247aca1b509aade7982
 
     for individual in json.loads(wholeArray):
         # change the 0 to category when categoryArray is a dictionary
@@ -138,22 +132,12 @@ def generateAverages(income, location):
     # individualDictionary contains a dictionary of filtered budgetProfiles
     range = 0.25
     optional = False
-<<<<<<< HEAD
     if(income == None) :
          range = 15
          income = 3000
     if(location == None) :
          optional = True
     wholeArray = parseCSV2(float(income), str(location), data_csv2(), range, optional)
-=======
-    if(income == None):
-        range = 15
-        income = 3000
-    if(location == None):
-        optional = True
-    wholeArray = parseCSV(float(income), str(location),
-                          data_csv(), range, optional)
->>>>>>> 256f938265a8144c880ca247aca1b509aade7982
     averages = {}
     count = 0
 
@@ -270,7 +254,6 @@ def webhook():
 
     if("category" in data and len(str(data["category"])) > 0):
         toReturn = {}
-        return json.dumps(budgets)
         value = budgets[data["category"]]
         message = "On average, people spend " + \
             str(value) + " on " + str(data["category"])
@@ -286,11 +269,7 @@ def webhook():
 
     message += "You should budget: "
 
-<<<<<<< HEAD
     for category, value in budgets.items() :
-=======
-    for category, value in budgets.items():
->>>>>>> 256f938265a8144c880ca247aca1b509aade7982
         message += str(value) + " for " + category + ", "
 
     message = message[:-2]
