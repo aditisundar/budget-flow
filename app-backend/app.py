@@ -4,6 +4,9 @@ import json
 from flask import Flask, session, request
 from analytics.helper import parseCSV
 from analytics.dummy_data_generator import data_csv
+from analytics.helper2 import parseCSV2
+from analytics.dummy_data_generator2 import data_csv2
+
 from integration.flowchart import FlowChart
 from flask_cors import CORS, cross_origin
 
@@ -95,15 +98,9 @@ def stats(username, password, name):
 def returnBudgetArray(salary, location, category):
     test_nessie_id = '5b72dc8f322fa06b67793bb8'
 
-<<<<<<< HEAD
     ## individualDictionary contains a dictionary of filtered budgetProfiles
     wholeArray = parseCSV(int(salary), str(location), data_csv(), 0.25, False)
     numArray = [];
-=======
-    # individualDictionary contains a dictionary of filtered budgetProfiles
-    wholeArray = parseCSV(int(salary), str(location), data_csv())
-    numArray = []
->>>>>>> bae0d8846cb437124dd4b9dc46c77c3a38b94d03
 
     for individual in json.loads(wholeArray):
         # change the 0 to category when categoryArray is a dictionary
@@ -138,7 +135,7 @@ def generateAverages(income, location) :
          income = 3000
     if(location == None) :
          optional = True
-    wholeArray = parseCSV(float(income), str(location), data_csv(), range, optional)
+    wholeArray = parseCSV2(float(income), str(location), data_csv2(), range, optional)
     averages = {}
     count = 0
 
@@ -254,13 +251,13 @@ def webhook():
 
     if("category" in data and len(str(data["category"])) > 0) :
         toReturn = {}
+        return json.dumps(budgets)
         value = budgets[data["category"]]
         message = "On average, people spend " + str(value) + " on " + str(data["category"])
         toReturn["fulfillmentText"] = message
         return json.dumps(toReturn)
 
     toReturn = {}
-<<<<<<< HEAD
     message = ""
     if(income != None) :
         message += "For an income of " + income + " - "
@@ -270,12 +267,6 @@ def webhook():
     message += "You should budget: "
 
     for category, value in budgets.items() :
-=======
-    message = "Hey whats up, your income is " + income
-    message += ", your location is " + location
-    message += ". You should budget: "
-    for category, value in budgets.items():
->>>>>>> bae0d8846cb437124dd4b9dc46c77c3a38b94d03
         message += str(value) + " for " + category + ", "
 
     message = message[:-2]
