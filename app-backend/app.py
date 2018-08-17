@@ -107,7 +107,7 @@ def returnBudgetArray(salary, location, category):
 
     for individual in json.loads(wholeArray) :
         ## change the 0 to category when categoryArray is a dictionary
-        numArray.append(individual["categoryArray"][category])
+        numArray.append(individual["categoryArray"][int(category)])
 
     return json.dumps(numArray)
 
