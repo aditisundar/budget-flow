@@ -1,6 +1,7 @@
 from flask import Flask, request
 import requests, json
-from helper.py import helper
+import helper
+import dummy_data
 app = Flask(__name__)
 
 
@@ -20,11 +21,12 @@ def generate() :
     income = parameters["income"]
     location = parameters["location"]
 
+
     ## individualDictionary contains a dictionary of filtered budgetProfiles
-    individualDictionary = json.loads(helper.parseCSV(income, location))
+    return helper.parseCSV(income, str(location), dummy_data.data_csv())
 
     ## return the individualDictionary in json form
-    return json.dumps(individualDictionary)
+    # return json.dumps(individualDictionary)
 
 
 ## function to take in income and location from dialogflow, budgetArray from
@@ -40,7 +42,7 @@ def fillDialogFlow(income, location, budgetArray) :
     return toReturn
 
 # endpoint for dialogflow, POST request
-@app.route("/", methods=['POST'])
+@app.route("/dialogFlow", methods=['POST'])
 def webhook():
     # returns a dictionary of the data from dialog flow
     # returns a dictionary of the data from dialog flow
