@@ -1,6 +1,7 @@
-import sqlite3
-from flask import Flask, session
-
+import sqlite3, requests, json
+from flask import Flask, session, request
+from analytics.helper import parseCSV
+from analytics.dummy_data_generator import data_csv
 from integration.flowchart import FlowChart
 from flask_cors import CORS, cross_origin
 
@@ -110,8 +111,14 @@ def generate():
     income = parameters["income"]
     location = parameters["location"]
 
+<<<<<<< HEAD
     # individualDictionary contains a dictionary of filtered budgetProfiles
     return helper.parseCSV(income, str(location), dummy_data.data_csv())
+=======
+
+    ## individualDictionary contains a dictionary of filtered budgetProfiles
+    return parseCSV(income, str(location), data_csv())
+>>>>>>> 6e11aeb0b179c40810902d7361d3f373fb5338d8
 
     # return the individualDictionary in json form
     # return json.dumps(individualDictionary)
@@ -134,7 +141,6 @@ def fillDialogFlow(income, location, budgetArray):
 
 @app.route("/dialogFlow", methods=['POST'])
 def webhook():
-    # returns a dictionary of the data from dialog flow
     # returns a dictionary of the data from dialog flow
     data = request.get_json()
     data = data["queryResult"]["parameters"]
@@ -165,4 +171,4 @@ def webhook():
 
 
 if __name__ == '__main__':
-    index()
+    app.run(debug=True) # run this app
