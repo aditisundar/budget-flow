@@ -8,18 +8,16 @@ conn = sqlite3.connect('database.db')
 c = conn.cursor()
 
 
-@app.route("/")
-def index():
-    test_username = 'user2'
-    query = c.execute("SELECT * FROM users WHERE username = '%s'" % test_username).fetchall()
-    if len(query) == 0:
-        return redirect(url_for('createuser'))
-    nessie_id = query[0][2]
-    fc = FlowChart(nessie_id)
+@app.route("/<salary>/<location>")
+def index(salary, location):
+    nessie_id = 'dummy123'
+    fc = FlowChart(nessie_id, salary, location)
     fc.load_default()
     fc.update_database()
-    query2 = c.execute("SELECT * FROM users WHERE username = '%s'" % test_username).fetchall()
-    return "Hello World!"
+    query2 = c.execute("SELECT * FROM users WHERE nessieID = '%s'" %
+                       nessie_id).fetchall()
+
+    return query2
 
 
 @app.route("/createuser", methods=['GET', 'POST'])
