@@ -98,9 +98,15 @@ def stats(username, password, name):
 def returnBudgetArray(salary, location, category):
     test_nessie_id = '5b72dc8f322fa06b67793bb8'
 
+<<<<<<< HEAD
     ## individualDictionary contains a dictionary of filtered budgetProfiles
     wholeArray = parseCSV(int(salary), str(location), data_csv(), 0.25, False)
     numArray = [];
+=======
+    # individualDictionary contains a dictionary of filtered budgetProfiles
+    wholeArray = parseCSV(int(salary), str(location), data_csv(), 0.25, False)
+    numArray = []
+>>>>>>> 256f938265a8144c880ca247aca1b509aade7982
 
     for individual in json.loads(wholeArray):
         # change the 0 to category when categoryArray is a dictionary
@@ -122,40 +128,53 @@ def returnBudgetArray(salary, location, category):
     return json.dumps(result)
 
 # @app.route("/generateAverages", methods=['POST'])
-def generateAverages(income, location) :
+
+
+def generateAverages(income, location):
     # parameters = request.get_json()
     # income = parameters["income"]
     # location = parameters["location"]
 
-    ## individualDictionary contains a dictionary of filtered budgetProfiles
+    # individualDictionary contains a dictionary of filtered budgetProfiles
     range = 0.25
     optional = False
+<<<<<<< HEAD
     if(income == None) :
          range = 15
          income = 3000
     if(location == None) :
          optional = True
     wholeArray = parseCSV2(float(income), str(location), data_csv2(), range, optional)
+=======
+    if(income == None):
+        range = 15
+        income = 3000
+    if(location == None):
+        optional = True
+    wholeArray = parseCSV(float(income), str(location),
+                          data_csv(), range, optional)
+>>>>>>> 256f938265a8144c880ca247aca1b509aade7982
     averages = {}
     count = 0
 
-
-    for individual in json.loads(wholeArray) :
-        ## change the 0 to category when categoryArray is a dictionary
-        for category, value in individual["categoryArray"].items() :
-            if(category in averages) :
+    for individual in json.loads(wholeArray):
+        # change the 0 to category when categoryArray is a dictionary
+        for category, value in individual["categoryArray"].items():
+            if(category in averages):
                 averages[category] += value
-            else :
+            else:
                 averages[category] = value
 
         count += 1
 
-    for val in averages :
+    for val in averages:
         averages[val] = int(averages[val] / count)
 
     return json.dumps(averages)
 
 # test endpoint to make a get request to card and user information
+
+
 @app.route("/generateBudget", methods=['POST'])
 def generateBudget():
     parameters = request.get_json()
@@ -237,36 +256,41 @@ def webhook():
         budgets[name] = value
 
     # now budgets has the key value pairs
-    if("income" in data and len(str(data["income"])) > 0) :
+    if("income" in data and len(str(data["income"])) > 0):
         income = str(data["income"])
-    else :
+    else:
         income = None
 
-    if("location" in data and len(str(data["location"])) > 0) :
+    if("location" in data and len(str(data["location"])) > 0):
         location = data["location"]
-    else :
+    else:
         location = None
 
     budgets = json.loads(generateAverages(income, location))
 
-    if("category" in data and len(str(data["category"])) > 0) :
+    if("category" in data and len(str(data["category"])) > 0):
         toReturn = {}
         return json.dumps(budgets)
         value = budgets[data["category"]]
-        message = "On average, people spend " + str(value) + " on " + str(data["category"])
+        message = "On average, people spend " + \
+            str(value) + " on " + str(data["category"])
         toReturn["fulfillmentText"] = message
         return json.dumps(toReturn)
 
     toReturn = {}
     message = ""
-    if(income != None) :
+    if(income != None):
         message += "For an income of " + income + " - "
-    if(location != None) :
+    if(location != None):
         message += "A zip code in " + location + " - "
 
     message += "You should budget: "
 
+<<<<<<< HEAD
     for category, value in budgets.items() :
+=======
+    for category, value in budgets.items():
+>>>>>>> 256f938265a8144c880ca247aca1b509aade7982
         message += str(value) + " for " + category + ", "
 
     message = message[:-2]
