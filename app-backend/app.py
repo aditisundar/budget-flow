@@ -10,8 +10,39 @@ app = Flask(__name__)
 CORS(app)
 
 
-conn = sqlite3.connect('database.db')
-db = conn.cursor()
+def upsert_database(chart, nessie_id):
+    """ Pass updated budgetted values to database. """
+    conn = sqlite3.connect('database.db')
+    db = conn.cursor()
+    tup = tuple([card.budgetted for card in chart] + [nessie_id])
+    update_query = """
+        UPDATE
+            users
+        SET
+            f1 = %f,
+            f2 = %f,
+            f3 = %f,
+            f4 = %f,
+            f5 = %f,
+            f6 = '%s',
+            f7 = %f,
+            f8 = %f,
+            f9 = %f,
+            f10 = '%s',
+            f11 = %f,
+            f12 = '%s',
+            f13 = %f,
+            f14 = %f,
+            f15 = %f,
+            f16 = %f,
+            f17 = %f,
+            f18 = %f
+        WHERE
+            nessieID = '%s'
+    """ % tup
+    db.execute(update_query)
+    conn.commit()
+    conn.close()
 
 
 @app.route("/<salary>/<location>")
@@ -21,22 +52,28 @@ def index(salary, location):
     # Creates FlowChart object, populates the flowchart, updates the database, and spits out JSON for front end.
     fc = FlowChart(test_nessie_id, int(salary), str(location), True)
     fc.load_default()
-    fc.upsert_database()
+    upsert_database(fc.chart, test_nessie_id)
     cardsObject = fc.front_end_json()
     return cardsObject
 
 
-@app.route("/update/<num>/<value>")
-def update(num, value):
+@app.route("/update/<salary>/<location>/<num>/<value>")
+def update(salary, location, num, value):
     test_nessie_id = '5b72dc8f322fa06b67793bb8'
     # Code that should be run when editting one card
-    #card_num = None
-    #card_new_value = None
-    #db.execute("""UPDATE users SET %s = WHERE nessieID = %i""" % ('f' + str(card_num), card_new_value))
-    #fc = FlowChart(test_nessie_id, salary, zipcode, False)
-    # fc.load_default()
+    conn = sqlite3.connect('database.db')
+    db = conn.cursor()
+    card_num = int(num)
+    card_new_value = int(value)
+    db.execute("""UPDATE users SET %s = %f WHERE nessieID = '%s'""" %
+               ('f' + str(card_num), card_new_value, test_nessie_id))
+    conn.commit()
+    conn.close()
+    fc = FlowChart(test_nessie_id, int(salary), str(location), False)
+    fc.load_default()
     # fc.upsert_database()
-    #cardsObject = fc.front_end_json()
+    cardsObject = fc.front_end_json()
+    return cardsObject
 
 
 @app.route("/<username>/<password>/name=<name>")
@@ -70,7 +107,7 @@ def returnBudgetArray(salary, location, category):
 
     for individual in json.loads(wholeArray) :
         ## change the 0 to category when categoryArray is a dictionary
-        numArray.append(individual["categoryArray"][0])
+        numArray.append(individual["categoryArray"][category])
 
     return json.dumps(numArray)
 
@@ -115,7 +152,25 @@ def generate() :
     ## return the individualDictionary in json form
     # return json.dumps(individualDictionary)
 
+    # return the individualDictionary in json form
+    # return json.dumps(individualDictionary)
+
+
+# function to take in income and location from dialogflow, budgetArray from
+# the server
+def fillDialogFlow(income, location, budgetArray):
+    toReturn = {}
+    str = "Hey whats up, your income is " + income
+    str += ", your location is " + location
+    str += ", and "
+    for category, value in budgetArray.items():
+        str += category + " - " + value
+    toReturn["fulfillmentText"] = str
+    return toReturn
+
 # endpoint for dialogflow, POST request
+
+
 @app.route("/dialogFlow", methods=['POST'])
 def webhook():
     # returns a dictionary of the data from dialog flow
@@ -128,7 +183,7 @@ def webhook():
 
     dataArray = json.loads(server_data)
 
-    ## now cardDataArray has all of the cards, we just want key value pairs
+    # now cardDataArray has all of the cards, we just want key value pairs
     budgets = {}
 
     for item in dataArray :
@@ -136,7 +191,7 @@ def webhook():
         value = item["budgetted"]
         budgets[name] = value
 
-    ## now budgets has the key value pairs
+    # now budgets has the key value pairs
 
     input = {
         "income": str(data["income"]),

@@ -36,29 +36,38 @@ class Flowchart extends Component {
             return data.json();
         }).then(results => {
             this.setState({ cards: results });
-            console.log(this.state.cards)
         })
     }
 
-    updateCards(value) {
-
+    updateCards(val, key) {
+        fetch(url + 'update/3000/22181/' + val + '/' + key).then(data => {
+            return data.json();
+        }).then(results => {
+            console.log(results)
+            this.setState({ cards: results });
+        })
     }
 
 
     render() {
+        var count = 0;
         return (
             <div className='Flowchart'>
                 {this.state.cards.map(card => {
+                    count++;
                     return <BudgetCard
                         className='BudgetCard'
                         category={card.category}
-                        key={card.name}
+                        key={count}
+                        num={count}
                         name={card.name}
                         amount={card.amount}
                         budgetted={card.budgetted}
                         remaining={card.remaining}
+                        updateCards={this.updateCards}
                     />
-                })}
+                })
+                }
             </div>
         )
     }

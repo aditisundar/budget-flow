@@ -292,6 +292,7 @@ class FlowChart:
         """ % tup
         db.execute(update_query)
         conn.commit()
+        conn.close()
 
 
 if __name__ == '__main__':
