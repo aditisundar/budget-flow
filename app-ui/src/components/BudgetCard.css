@@ -1,5 +1,5 @@
 .expenses,
-.debt,
+.debts,
 .emergency,
 .retirement {
     height: auto;
@@ -23,17 +23,17 @@
 }
 
 .expenses {
-    background-color: #b66d85;
+    background-color: rgb(236, 94, 75);
 }
 
-.debt {
-    background-color: #f09850;
+.debts {
+    background-color: rgb(68, 196, 132);
 }
 
 .emergency {
-    background-color: #66976a;
+    background-color: #F6AE2D;
 }
 
 .retirement {
-    background-color: #cceeff;
+    background-color: #86BBD8;
 }

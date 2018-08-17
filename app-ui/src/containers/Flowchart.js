@@ -38,17 +38,17 @@ class Flowchart extends Component {
             this.setState({ cards: results });
         })
     }
-
-    componentWillReceiveProps(nextProps, prevProps) {
-        if (nextProps !== prevProps) {
-            fetch(url + this.props.salary + '/' + this.props.location).then(data => {
-                return data.json();
-            }).then(results => {
-                this.setState({ cards: results });
-            })
+    /*
+        componentWillReceiveProps(nextProps, prevProps) {
+            if (nextProps !== prevProps) {
+                fetch(url + this.props.salary + '/' + this.props.location).then(data => {
+                    return data.json();
+                }).then(results => {
+                    this.setState({ cards: results });
+                })
+            }
         }
-    }
-
+    */
     updateCards(val, key) {
         fetch(url + 'update/' + this.props.salary + '/' + this.props.location + val + '/' + key).then(data => {
             return data.json();

@@ -113,7 +113,20 @@ def returnBudgetArray(salary, location, category):
         # change the 0 to category when categoryArray is a dictionary
         numArray.append(individual["categoryArray"][int(category)])
 
-    return json.dumps(numArray)
+    minVal = min(numArray)
+    maxVal = max(numArray)
+    interval = (maxVal - minVal)//5
+
+    result = []
+
+    for i in range(5):
+        key = str(minVal + i*interval) + ' - ' + str(minVal + (i+1)*interval)
+        result.append({"key": key, "value": 0})
+        for num in numArray:
+            if((num >= (minVal + i*interval)) and (num < (minVal + (i+1)*interval))):
+                result[i]["value"] += 1
+
+    return json.dumps(result)
 
 
 # test endpoint to make a get request to card and user information

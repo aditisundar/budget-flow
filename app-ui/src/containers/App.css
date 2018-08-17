@@ -10,6 +10,14 @@
     animation: fade-in-right cubic-bezier(0, 0.9, 0.3, 1.2) 0.8s forwards;
 }
 
+.header h1>.part2 {
+    font-weight: 500;
+    display: inline-block;
+    color: rgb(236, 94, 75);
+    opacity: 0;
+    animation: fade-in-right cubic-bezier(0, 0.9, 0.3, 1.2) 0.8s forwards;
+}
+
 .header h2 {
     font-weight: 300;
     display: inline-block;

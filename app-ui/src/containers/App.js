@@ -30,7 +30,7 @@ class App extends Component {
     return (
       <div className="App">
         <div className="header">
-          <h1>BudgetFlow</h1> <h2>Easy, quick budgets in a matter of seconds</h2>
+          <h1 className='part1'>cache</h1><h1 className='part2'>Flow</h1> <h2>Easy, quick budgets in a matter of seconds</h2>
         </div>
         <BasicForm
           salary={this.state.salary}

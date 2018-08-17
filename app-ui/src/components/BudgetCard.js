@@ -3,6 +3,7 @@ import './BudgetCard.css';
 import Compare from './Compare';
 import { TextField, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@material-ui/core';
 import PieContainer from './Pie';
+import { PieChart } from 'react-easy-chart';
 
 
 
@@ -87,20 +88,20 @@ class EditDialog extends React.Component {
 
 class CompareDialog extends React.Component {
     state = {
-        data: {},
+        data: [],
         open: false,
     };
 
-    /*componentDidMount() {
-        fetch('').then(data => {
+    handleClickOpen = () => {
+        fetch('http://localhost:5000/3000/94016/0').then(data => {
             return data.json();
         }).then(results => {
-            this.setState({ data: results })
+            results.map(each => {
+                this.state.data.push(each);
+                this.setState({ open: true });
+            })
+            console.log(this.state.data)
         })
-    }*/
-
-    handleClickOpen = () => {
-        this.setState({ open: true });
     };
 
     handleClose = () => {
@@ -119,15 +120,16 @@ class CompareDialog extends React.Component {
                     <DialogTitle id="form-dialog-title">What are others spending on {this.props.name}?</DialogTitle>
                     <DialogContent>
                         <DialogContentText>
-                            See how people like you are spending.
+                            Percentage of people like you within each spending range.
                         </DialogContentText>
 
-                        {/*<PieChart
+
+                        {this.state.open && <PieChart
                             size={400}
-                            innerHoleSize={200}
+                            innerHoleSize={0}
                             labels
-                            data={this.state.data}
-                        />*/}
+                            data={/*[{ "key": "4.0 - 594.2", "value": 57 }, { "key": "594.2 - 1184.4", "value": 81 }, { "key": "1184.4 - 1774.6000000000001", "value": 56 }, { "key": "1774.6000000000001 - 2364.8", "value": 14 }, { "key": "2364.8 - 2955.0", "value": 1 }]*/this.state.data}
+                        />}
 
 
                         {/*<PieContainer />*/}
