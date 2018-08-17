@@ -39,12 +39,13 @@ class App extends Component {
           handleChange={this.handleChange}
           handleSubmit={this.handleSubmit}
           updateCards={this.updateCards} />
-        <Flowchart salary={this.state.salary}
+        {this.state.budgetEntered && <Flowchart
+          salary={this.state.salary}
           location={this.state.location}
           budgetEntered={this.state.budgetEntered}
           handleChange={this.handleChange}
           handleSubmit={this.handleSubmit}
-          updateCards={this.updateCards} />
+          updateCards={this.updateCards} />}
       </div>
     );
   }

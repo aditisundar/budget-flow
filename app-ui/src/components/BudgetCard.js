@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './BudgetCard.css';
 import Compare from './Compare';
 import { TextField, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@material-ui/core';
-//import PieChart from './Pie';
+import PieContainer from './Pie';
 
 
 
@@ -87,8 +87,17 @@ class EditDialog extends React.Component {
 
 class CompareDialog extends React.Component {
     state = {
+        data: {},
         open: false,
     };
+
+    /*componentDidMount() {
+        fetch('').then(data => {
+            return data.json();
+        }).then(results => {
+            this.setState({ data: results })
+        })
+    }*/
 
     handleClickOpen = () => {
         this.setState({ open: true });
@@ -112,9 +121,16 @@ class CompareDialog extends React.Component {
                         <DialogContentText>
                             See how people like you are spending.
                         </DialogContentText>
-                        {/*** GRAPH GOES HERE ***
-                            <PieChart />
-                        *** GRAPH GOES HERE ***/}
+
+                        {/*<PieChart
+                            size={400}
+                            innerHoleSize={200}
+                            labels
+                            data={this.state.data}
+                        />*/}
+
+
+                        {/*<PieContainer />*/}
 
                     </DialogContent>
                     <DialogActions>

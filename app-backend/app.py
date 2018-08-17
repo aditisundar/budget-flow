@@ -1,4 +1,6 @@
-import sqlite3, requests, json
+import sqlite3
+import requests
+import json
 from flask import Flask, session, request
 from analytics.helper import parseCSV
 from analytics.dummy_data_generator import data_csv
@@ -111,14 +113,8 @@ def generate():
     income = parameters["income"]
     location = parameters["location"]
 
-<<<<<<< HEAD
     # individualDictionary contains a dictionary of filtered budgetProfiles
-    return helper.parseCSV(income, str(location), dummy_data.data_csv())
-=======
-
-    ## individualDictionary contains a dictionary of filtered budgetProfiles
     return parseCSV(income, str(location), data_csv())
->>>>>>> 6e11aeb0b179c40810902d7361d3f373fb5338d8
 
     # return the individualDictionary in json form
     # return json.dumps(individualDictionary)
@@ -171,4 +167,4 @@ def webhook():
 
 
 if __name__ == '__main__':
-    app.run(debug=True) # run this app
+    app.run(debug=True)  # run this app
