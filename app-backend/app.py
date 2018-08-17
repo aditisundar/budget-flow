@@ -14,7 +14,7 @@ db = conn.cursor()
 def index():
     test_nessie_id = '5b72dc8f322fa06b67793bb8'
     salary = None
-    zipcode =  None
+    zipcode = None
 
     # Creates FlowChart object, populates the flowchart, updates the database, and spits out JSON for front end.
     fc = FlowChart(test_nessie_id, salary, zipcode, True)
@@ -28,10 +28,9 @@ def index():
     #card_new_value = None
     #db.execute("""UPDATE users SET %s = WHERE nessieID = %i""" % ('f' + str(card_num), card_new_value))
     #fc = FlowChart(test_nessie_id, salary, zipcode, False)
-    #fc.load_default()
-    #fc.upsert_database()
+    # fc.load_default()
+    # fc.upsert_database()
     #cardsObject = fc.front_end_json()
-
 
 
 @app.route("/<username>/<password>/name=<name>")
