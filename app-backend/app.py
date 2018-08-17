@@ -3,46 +3,18 @@ from flask import Flask, session
 app = Flask(__name__)
 
 
-# Set up database.
-conn = sqlite3.connect('database.db')
-c = conn.cursor()
-
-
 @app.route("/")
 def index():
-    test_username = 'user2'
-    query = c.execute("SELECT * FROM users WHERE username = '%s'" % test_username).fetchall()
-    if len(query) == 0:
-        return redirect(url_for('createuser'))
-    nessie_id = query[0][2]
-    fc = FlowChart(nessie_id)
+    test_nessie_id = '5b72dc8f322fa06b67793bb8'
+    salary = None
+    zipcode =  None
+
+    # Creates FlowChart object, populates the flowchart, updates the database, and spits out JSON for front end.
+    fc = FlowChart(test_nessie_id, salary, zipcode, True)
     fc.load_default()
-    fc.update_database()
-    query2 = c.execute("SELECT * FROM users WHERE username = '%s'" % test_username).fetchall()
+    fc.upsert_database()
+    cardsObject = fc.front_end_json()
     return "Hello World!"
-
-
-@app.route("/createuser", methods=['GET', 'POST'])
-def create_user():
-    """ Creates user. """
-    if request.method == 'POST':
-        return redirect(url_for('index.html'))
-    return render_template('createuser.html')
-
-
-@app.route("/flowchart/<username>/<password>")
-def flowchart(username, password):
-    '''
-    @param username, password
-    * Queries the database with the given username & password
-    * Returns a JSON object containing the list of cards with values.'''
-    return ''
-
-
-@app.route("/cards")
-def cards():
-    '''Returns a JSON object containing a list of cards.'''
-    return ''
 
 
 @app.route("/<username>/<password>/name=<name>")
