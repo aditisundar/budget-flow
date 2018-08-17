@@ -6,7 +6,7 @@ import sqlite3
 import random
 import requests
 import json
-from model import ML_FOOD, ML_ESSENTIALS, ML_IEE, ML_NONESSENTIALS
+from integration.model import ML_FOOD, ML_ESSENTIALS, ML_IEE, ML_NONESSENTIALS
 
 
 conn = sqlite3.connect('database.db')
@@ -241,6 +241,11 @@ class FlowChart:
         return json.dumps([{'name': card.name, 'description': card.description,
             'category': card.category, 'budgetted': card.bvalue,
             'remaining': card.remaining} for card in self.chart])
+
+    def google_bot_json(self):
+        """ Return card data to Google Bot as JSON: [{cardObject}, {cardObject}, ...]
+        where {cardObject} contains 5 keys: name, description, category, budgetted, remaining
+        """
 
     def upsert_database(self):
         """ Pass updated budgetted values to database. """

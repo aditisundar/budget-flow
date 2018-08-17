@@ -1,5 +1,8 @@
 import sqlite3
 from flask import Flask, session
+
+from integration.flowchart import FlowChart
+
 app = Flask(__name__)
 
 
@@ -15,9 +18,9 @@ def index():
 
     # Creates FlowChart object, populates the flowchart, updates the database, and spits out JSON for front end.
     fc = FlowChart(test_nessie_id, salary, zipcode, True)
-    fc.load_default()
-    fc.upsert_database()
-    cardsObject = fc.front_end_json()
+    #  fc.load_default()
+    # fc.upsert_database()
+    # cardsObject = fc.front_end_json()
     return "Hello World!"
 
     # Code that should be run when editting one card
