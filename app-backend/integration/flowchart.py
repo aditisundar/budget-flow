@@ -6,7 +6,9 @@ import sqlite3
 import random
 import requests
 import json
-from integration.model import ML_FOOD, ML_ESSENTIALS, ML_IEE, ML_NONESSENTIALS
+import pandas as pd
+from tensorflow import keras
+from model import get_mean_std
 
 
 conn = sqlite3.connect('database.db')
@@ -78,7 +80,7 @@ class Card:
             self.is_fulfilled = True
             return (current - self.budgetted)
         else:
-            self.value = self.current
+            self.value = current
             self.is_fulfilled = True
             return 0
 
@@ -176,21 +178,27 @@ class FlowChart:
         monthly_hsa = 100
 
         # Get pre-populated/database budgetted numbers for each card.
+        ml_food = self.predict_using_model('food', self.salary, self.zipcode)
+        ml_essentials = self.predict_using_model('essentials', self.salary, self.zipcode)
+        ml_iee = self.predict_using_model('IEE', self.salary, self.zipcode)
         if is_first_time:
-            self.budgetted = (monthly_rent, ML_FOOD, ML_ESSENTIALS, ML_IEE, monthly_healthcare, 'minimums',
-                              max(1000, monthly_rent + ML_FOOD +
-                                  ML_ESSENTIALS + ML_IEE + monthly_healthcare),
-                              ML_NONESSENTIALS, monthly_era, 'hi_loans', 3 *
-                              (monthly_rent + ML_FOOD + ML_ESSENTIALS +
-                               ML_IEE + monthly_healthcare),
-                              'mod_loans', 0, 0, 0, monthly_hsa, 0, 0)
+            self.budgetted = (monthly_rent, ml_food, ml_essentials, ml_iee,
+                                monthly_healthcare, 'minimums', max(1000, monthly_rent + ml_food +
+                                  ml_essentials + ml_iee + monthly_healthcare),
+                                ml_iee, monthly_era, 'hi_loans',
+                                3 * (monthly_rent + ml_food + ml_essentials + ml_iee + monthly_healthcare),
+                                'mod_loans', 0, 0, 0, monthly_hsa, 0, 0)
         else:
-            self.budgetted = db.execute(
-                "SELECT * FROM users WHERE nessieID = '%s'" % self.nessie_id).fetchall()[0][3:]
+            self.budgetted = db.execute("SELECT * FROM users WHERE nessieID = '%s'" % self.nessie_id).fetchall()[0][3:]
 
         self.current = self.salary
         self.chart = []
         self.get_nessie_data()
+
+    def predict_using_model(self, key, income, zipcode):
+        model = keras.models.load_model(key + '.h5')
+        mean, std = get_mean_std()[key]
+        return model.predict(pd.DataFrame([[(income - mean) / std, 0, 0, 1, 0, 0]])).flatten()[0]
 
     def get_nessie_data(self):
         """ Get loan and balance data from Nessie. """
