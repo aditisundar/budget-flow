@@ -9,11 +9,13 @@ import { TextField, Button, Dialog, DialogActions, DialogContent, DialogContentT
 class BudgetCard extends Component {
 
     render() {
+        console.log(this.props.category)
         return (
             <div className='BudgetCard'>
                 <div className={this.props.category}>
                     <h1>{this.props.name}</h1>
-                    <h2>${this.props.amount}</h2>
+                    <h2>${this.props.budgetted}</h2>
+                    <h2>${this.props.remaining}</h2>
                     <EditDialog updateCards={this.props.updateCards} name={this.props.name} />
                     <CompareDialog name={this.props.name} />
 

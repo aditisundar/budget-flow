@@ -24,6 +24,10 @@ def index(salary, location):
     cardsObject = fc.front_end_json()
     return cardsObject
 
+
+@app.route("/update/<num>/<value>")
+def update(num, value):
+    test_nessie_id = '5b72dc8f322fa06b67793bb8'
     # Code that should be run when editting one card
     #card_num = None
     #card_new_value = None
