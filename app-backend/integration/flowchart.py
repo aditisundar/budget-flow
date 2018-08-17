@@ -201,9 +201,9 @@ class FlowChart:
         self.get_nessie_data()
 
     def predict_using_model(self, key, income, zipcode):
-        model = keras.models.load_model(key + '.h5')
+        model = keras.models.load_model('integration/' + key + '.h5')
         mean, std = get_mean_std()[key]
-        return model.predict(pd.DataFrame([[(income - mean) / std, 0, 0, 1, 0, 0]])).flatten()[0]
+        return int(model.predict(pd.DataFrame([[(income - mean) / std, 0, 0, 1, 0, 0]])).flatten()[0].item())
 
     def get_nessie_data(self):
         """ Get loan and balance data from Nessie. """
