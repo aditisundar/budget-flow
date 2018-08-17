@@ -1,4 +1,4 @@
-from dummy_data import data_csv
+from .dummy_data_generator import data_csv
 import json
 
 
