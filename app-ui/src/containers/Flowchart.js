@@ -36,6 +36,9 @@ class Flowchart extends Component {
             return data.json();
         }).then(results => {
             this.setState({ cards: results });
+        }).catch(error => {
+            this.setState({ error: "Error fetching from the server! Please try again!" })
+
         })
     }
 
