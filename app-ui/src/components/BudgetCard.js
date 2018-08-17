@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import './BudgetCard.css';
-import Compare from './Compare';
 import { TextField, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@material-ui/core';
-import PieContainer from './Pie';
 import { PieChart } from 'react-easy-chart';
 
 
@@ -14,8 +12,8 @@ class BudgetCard extends Component {
             <div className='BudgetCard'>
                 <div className={this.props.category}>
                     <h1>{this.props.name}</h1>
-                    <h2>${this.props.budgetted}</h2>
-                    <h2>${this.props.remaining}</h2>
+                    Budgeted<h2>${this.props.budgetted}</h2>
+                    Remaining<h2>${this.props.remaining}</h2>
                     <EditDialog num={this.props.num} updateCards={this.props.updateCards} name={this.props.name} />
                     <CompareDialog name={this.props.name} />
 
