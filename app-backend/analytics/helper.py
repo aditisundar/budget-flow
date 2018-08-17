@@ -10,11 +10,19 @@ class Individual:
         self.categoryArray = categoryArray
 
 
-def parseCSV(income, zipcode, data):
+def parseCSV(income, zipcode, data, incomeRange, isZipCodeOptional):
    individuals = []
    for index, row in data.iterrows():
-       if (income * 0.75 < row['income']) and (row['income'] < income * 1.25) and (zipcode == row['zipcodes']):
-           category_array = [row['food'], row['essentials'], row['IEE']]
+       if(isZipCodeOptional) :
+        zipcode = row['zipcodes']
+
+       if (income * (1 - incomeRange) < row['income']) and (row['income'] < income * (1 + incomeRange)) and (zipcode == row['zipcodes']):
+           category_array = {}
+           for categoryName in row.keys() :
+               category_array[categoryName] = row[categoryName]
+
+           del category_array["income"]
+           del category_array["zipcodes"]
            individual = Individual(row['income'], row['zipcodes'], category_array)
            individuals.append(individual)
    json_string = json.dumps([ind.__dict__ for ind in individuals])

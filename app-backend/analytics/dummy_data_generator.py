@@ -3,7 +3,7 @@ import numpy
 import pandas
 
 num_of_users = 10000
-num_of_budget_params = 3
+num_of_budget_params = 10
 total_income = 0
 total_food = 0
 total_essentials = 0
@@ -37,14 +37,19 @@ def generate_data():
 
     return {'zipcodes': zipcodes[random_city_num], 'income': random_income,
             'food': int(random_income * divided_list[0]),
-            'essentials': int(random_income * divided_list[1]),
-            'IEE': int(random_income * divided_list[2])
+            'healthcare': int(random_income * divided_list[1]),
+            'transportation': int(random_income * divided_list[2]),
+            'rent': int(random_income * divided_list[3]),
+            'entertainment': int(random_income * divided_list[4]),
+            'gifts': int(random_income * divided_list[5]),
+            'personal care': int(random_income * divided_list[6])
             }
 
 
 def data_csv():
     dummy_data = ([generate_data() for i in range(num_of_users)])
-    dummy_data = pandas.DataFrame(dummy_data, columns=['zipcodes', 'income', 'food', 'essentials', 'IEE'])
+    dummy_data = pandas.DataFrame(dummy_data, columns=['zipcodes', 'income',
+    'food', 'healthcare', 'transportation', 'rent', 'entertainment', 'gifts', 'personal care'])
     # dummy_data = pandas.DataFrame.to_csv(dummy_data)
     return dummy_data
 

@@ -86,23 +86,13 @@ def stats(username, password, name):
     '''
     return ''
 
-
-@app.route("/bot_backend")
-def bot_backend():
-    test_nessie_id = '5b72dc8f322fa06b67793bb8'
-    salary = None
-    zipcode = None
-    fc = FlowChart(test_nessie_id, salary, zipcode, True)
-    fc.load_default()
-    return fc.google_bot_json()
-
 # returns an array of numbers for all users with certain category
 @app.route("/<salary>/<location>/<category>")
 def returnBudgetArray(salary, location, category):
     test_nessie_id = '5b72dc8f322fa06b67793bb8'
 
     ## individualDictionary contains a dictionary of filtered budgetProfiles
-    wholeArray = parseCSV(int(salary), str(location), data_csv())
+    wholeArray = parseCSV(int(salary), str(location), data_csv(), 0.25, False)
     numArray = [];
 
     for individual in json.loads(wholeArray) :
@@ -111,6 +101,39 @@ def returnBudgetArray(salary, location, category):
 
     return json.dumps(numArray)
 
+# @app.route("/generateAverages", methods=['POST'])
+def generateAverages(income, location) :
+    # parameters = request.get_json()
+    # income = parameters["income"]
+    # location = parameters["location"]
+
+    ## individualDictionary contains a dictionary of filtered budgetProfiles
+    range = 0.25
+    optional = False
+    if(income == None) :
+         range = 15
+         income = 3000
+    if(location == None) :
+         optional = True
+    wholeArray = parseCSV(float(income), str(location), data_csv(), range, optional)
+    averages = {}
+    count = 0
+
+
+    for individual in json.loads(wholeArray) :
+        ## change the 0 to category when categoryArray is a dictionary
+        for category, value in individual["categoryArray"].items() :
+            if(category in averages) :
+                averages[category] += value
+            else :
+                averages[category] = value
+
+        count += 1
+
+    for val in averages :
+        averages[val] = int(averages[val] / count)
+
+    return json.dumps(averages)
 
 # test endpoint to make a get request to card and user information
 @app.route("/generateBudget", methods=['POST'])
@@ -192,20 +215,34 @@ def webhook():
         budgets[name] = value
 
     # now budgets has the key value pairs
+    if("income" in data and len(str(data["income"])) > 0) :
+        income = str(data["income"])
+    else :
+        income = None
 
-    input = {
-        "income": str(data["income"]),
-        "location": data["location"],
-        "budgets": budgets
-    }
+    if("location" in data and len(str(data["location"])) > 0) :
+        location = data["location"]
+    else :
+        location = None
 
-    income = input["income"]
-    location = input["location"]
+    budgets = json.loads(generateAverages(income, location))
+
+    if("category" in data and len(str(data["category"])) > 0) :
+        toReturn = {}
+        value = budgets[data["category"]]
+        message = "On average, people spend " + str(value) + " on " + str(data["category"])
+        toReturn["fulfillmentText"] = message
+        return json.dumps(toReturn)
 
     toReturn = {}
-    message = "Hey whats up, your income is " + income
-    message += ", your location is " + location
-    message += ". You should budget: "
+    message = ""
+    if(income != None) :
+        message += "For an income of " + income + " - "
+    if(location != None) :
+        message += "A zip code in " + location + " - "
+
+    message += "You should budget: "
+
     for category, value in budgets.items() :
         message += str(value) + " for " + category + ", "
 
