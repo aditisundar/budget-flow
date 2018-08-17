@@ -22,6 +22,7 @@ class BasicForm extends Component {
     handleSubmit(e) {
         this.setState({ budgetEntered: 1 });
         console.log(this.state);
+
     }
 
     render() {

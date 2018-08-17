@@ -10,18 +10,16 @@ conn = sqlite3.connect('database.db')
 db = conn.cursor()
 
 
-@app.route("/")
-def index():
+@app.route("/<salary>/<location>")
+def index(salary, location):
     test_nessie_id = '5b72dc8f322fa06b67793bb8'
-    salary = None
-    zipcode = None
 
     # Creates FlowChart object, populates the flowchart, updates the database, and spits out JSON for front end.
-    fc = FlowChart(test_nessie_id, salary, zipcode, True)
-    #  fc.load_default()
-    # fc.upsert_database()
-    # cardsObject = fc.front_end_json()
-    return "Hello World!"
+    fc = FlowChart(test_nessie_id, int(salary), str(location), True)
+    fc.load_default()
+    fc.upsert_database()
+    cardsObject = fc.front_end_json()
+    return cardsObject
 
     # Code that should be run when editting one card
     #card_num = None

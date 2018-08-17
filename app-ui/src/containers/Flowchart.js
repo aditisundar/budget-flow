@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import BudgetCard from '../components/BudgetCard';
 import './Flowchart.css';
 
-const CARDS = [
+const url = 'http://localhost:5000/';
+
+const CARDS1 = [
     {
         category: "Expenses",
         name: "Restaurants",
@@ -19,6 +21,8 @@ const CARDS = [
         amount: 50,
     },
 ]
+
+const CARDS = fetch(url + '3000/22181')
 
 class Flowchart extends Component {
     constructor() {
