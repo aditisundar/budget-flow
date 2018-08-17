@@ -253,9 +253,14 @@ class FlowChart:
                             'remaining': card.remaining} for card in self.chart])
 
     def google_bot_json(self):
-        """ Return card data to Google Bot as JSON: [{cardObject}, {cardObject}, ...]
-        where {cardObject} contains 5 keys: name, description, category, budgetted, remaining
+        """ Pass card data to Google Bot as JSON: [{cardObject}, {cardObject}, ...]
+            where {cardObject} contains 5 keys: name, description, category, budgetted, remaining
         """
+        simplified_chart = list(filter(lambda x: x.name == 'Food' or x.name == 'Essentials' or x.name ==
+                                       'Income-Earning Expenses' or x.name == 'Non-Essential Bills', self.chart))
+        return json.dumps([{'name': card.name, 'description': card.description,
+                            'category': card.category, 'budgetted': card.bvalue,
+                            'remaining': card.remaining} for card in simplified_chart])
 
     def upsert_database(self):
         """ Pass updated budgetted values to database. """
@@ -292,4 +297,3 @@ class FlowChart:
 if __name__ == '__main__':
     fc = FlowChart("5b72dc8f322fa06b67793bb8", 10000, '02138', True)
     fc.load_default()
-    # fc.upsert_database()

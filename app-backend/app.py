@@ -3,6 +3,7 @@ from flask import Flask, session
 
 from integration.flowchart import FlowChart
 
+
 app = Flask(__name__)
 
 
@@ -40,6 +41,16 @@ def stats(username, password, name):
     * Ex: If the name is 'Food', then this should return a boxplot summary of how much people from the same (location, income, etc.) as the user spend on food monthly.
     '''
     return ''
+
+
+@app.route("/bot_backend")
+def bot_backend():
+    test_nessie_id = '5b72dc8f322fa06b67793bb8'
+    salary = None
+    zipcode = None
+    fc = FlowChart(test_nessie_id, salary, zipcode, True)
+    fc.load_default()
+    return fc.google_bot_json()
 
 
 if __name__ == '__main__':
