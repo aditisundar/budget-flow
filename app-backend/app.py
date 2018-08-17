@@ -2,9 +2,11 @@ import sqlite3
 from flask import Flask, session
 
 from integration.flowchart import FlowChart
+from flask_cors import CORS, cross_origin
 
 
 app = Flask(__name__)
+CORS(app)
 
 
 conn = sqlite3.connect('database.db')
