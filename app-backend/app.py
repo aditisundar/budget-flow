@@ -1,4 +1,6 @@
-import sqlite3, requests, json
+import sqlite3
+import requests
+import json
 from flask import Flask, session, request
 from analytics.helper import parseCSV
 from analytics.dummy_data_generator import data_csv
@@ -87,19 +89,40 @@ def stats(username, password, name):
     return ''
 
 # returns an array of numbers for all users with certain category
+
+
 @app.route("/<salary>/<location>/<category>")
 def returnBudgetArray(salary, location, category):
     test_nessie_id = '5b72dc8f322fa06b67793bb8'
 
+<<<<<<< HEAD
     ## individualDictionary contains a dictionary of filtered budgetProfiles
     wholeArray = parseCSV(int(salary), str(location), data_csv(), 0.25, False)
     numArray = [];
+=======
+    # individualDictionary contains a dictionary of filtered budgetProfiles
+    wholeArray = parseCSV(int(salary), str(location), data_csv())
+    numArray = []
+>>>>>>> bae0d8846cb437124dd4b9dc46c77c3a38b94d03
 
-    for individual in json.loads(wholeArray) :
-        ## change the 0 to category when categoryArray is a dictionary
+    for individual in json.loads(wholeArray):
+        # change the 0 to category when categoryArray is a dictionary
         numArray.append(individual["categoryArray"][int(category)])
 
-    return json.dumps(numArray)
+    minVal = min(numArray)
+    maxVal = max(numArray)
+    interval = (maxVal - minVal)//5
+
+    result = []
+
+    for i in range(5):
+        key = str(minVal + i*interval) + ' - ' + str(minVal + (i+1)*interval)
+        result.append({"key": key, "value": 0})
+        for num in numArray:
+            if((num >= (minVal + i*interval)) and (num < (minVal + (i+1)*interval))):
+                result[i]["value"] += 1
+
+    return json.dumps(result)
 
 # @app.route("/generateAverages", methods=['POST'])
 def generateAverages(income, location) :
@@ -137,16 +160,16 @@ def generateAverages(income, location) :
 
 # test endpoint to make a get request to card and user information
 @app.route("/generateBudget", methods=['POST'])
-def generateBudget() :
+def generateBudget():
     parameters = request.get_json()
     income = parameters["income"]
     location = parameters["location"]
 
     dataArray = json.loads(getFC(income, location))
-    ## now cardDataArray has all of the cards, we just want key value pairs
+    # now cardDataArray has all of the cards, we just want key value pairs
     budgets = {}
 
-    for item in dataArray :
+    for item in dataArray:
         name = item["name"]
         value = item["budgetted"]
         budgets[name] = value
@@ -167,12 +190,14 @@ def getFC(income, location):
     return fc.google_bot_json()
 
 # actual endpoint to get correct values for the above values
+
+
 @app.route("/generate", methods=['POST'])
-def generate() :
+def generate():
     parameters = request.get_json()
     return null
 
-    ## return the individualDictionary in json form
+    # return the individualDictionary in json form
     # return json.dumps(individualDictionary)
 
     # return the individualDictionary in json form
@@ -209,7 +234,7 @@ def webhook():
     # now cardDataArray has all of the cards, we just want key value pairs
     budgets = {}
 
-    for item in dataArray :
+    for item in dataArray:
         name = item["name"]
         value = item["budgetted"]
         budgets[name] = value
@@ -235,6 +260,7 @@ def webhook():
         return json.dumps(toReturn)
 
     toReturn = {}
+<<<<<<< HEAD
     message = ""
     if(income != None) :
         message += "For an income of " + income + " - "
@@ -244,6 +270,12 @@ def webhook():
     message += "You should budget: "
 
     for category, value in budgets.items() :
+=======
+    message = "Hey whats up, your income is " + income
+    message += ", your location is " + location
+    message += ". You should budget: "
+    for category, value in budgets.items():
+>>>>>>> bae0d8846cb437124dd4b9dc46c77c3a38b94d03
         message += str(value) + " for " + category + ", "
 
     message = message[:-2]
@@ -255,4 +287,4 @@ def webhook():
 
 
 if __name__ == '__main__':
-    app.run(debug=True) # run this app
+    app.run(debug=True)  # run this app

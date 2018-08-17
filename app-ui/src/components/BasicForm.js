@@ -19,7 +19,7 @@ class BasicForm extends Component {
                         and I make $
                     <TextField
                             name="salary"
-                            placeholder={30000}
+                            placeholder={3000}
                             onChange={this.props.handleChange}
                             margin="normal"
                         />

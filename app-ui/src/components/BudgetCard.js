@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import './BudgetCard.css';
-import Compare from './Compare';
 import { TextField, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@material-ui/core';
-//import PieChart from './Pie';
+import { PieChart } from 'react-easy-chart';
 
 
 
@@ -13,8 +12,8 @@ class BudgetCard extends Component {
             <div className='BudgetCard'>
                 <div className={this.props.category}>
                     <h1>{this.props.name}</h1>
-                    <h2>${this.props.budgetted}</h2>
-                    <h2>${this.props.remaining}</h2>
+                    Budgeted<h2>${this.props.budgetted}</h2>
+                    Remaining<h2>${this.props.remaining}</h2>
                     <EditDialog num={this.props.num} updateCards={this.props.updateCards} name={this.props.name} />
                     <CompareDialog name={this.props.name} />
 
@@ -87,11 +86,20 @@ class EditDialog extends React.Component {
 
 class CompareDialog extends React.Component {
     state = {
+        data: [],
         open: false,
     };
 
     handleClickOpen = () => {
-        this.setState({ open: true });
+        fetch('http://localhost:5000/3000/94016/0').then(data => {
+            return data.json();
+        }).then(results => {
+            results.map(each => {
+                this.state.data.push(each);
+                this.setState({ open: true });
+            })
+            console.log(this.state.data)
+        })
     };
 
     handleClose = () => {
@@ -110,11 +118,19 @@ class CompareDialog extends React.Component {
                     <DialogTitle id="form-dialog-title">What are others spending on {this.props.name}?</DialogTitle>
                     <DialogContent>
                         <DialogContentText>
-                            See how people like you are spending.
+                            Percentage of people like you within each spending range.
                         </DialogContentText>
-                        {/*** GRAPH GOES HERE ***
-                            <PieChart />
-                        *** GRAPH GOES HERE ***/}
+
+
+                        {this.state.open && <PieChart
+                            size={400}
+                            innerHoleSize={0}
+                            labels
+                            data={/*[{ "key": "4.0 - 594.2", "value": 57 }, { "key": "594.2 - 1184.4", "value": 81 }, { "key": "1184.4 - 1774.6000000000001", "value": 56 }, { "key": "1774.6000000000001 - 2364.8", "value": 14 }, { "key": "2364.8 - 2955.0", "value": 1 }]*/this.state.data}
+                        />}
+
+
+                        {/*<PieContainer />*/}
 
                     </DialogContent>
                     <DialogActions>
