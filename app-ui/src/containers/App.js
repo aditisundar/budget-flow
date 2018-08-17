@@ -10,7 +10,7 @@ class App extends Component {
     this.state = {
       salary: 0,
       location: '',
-      budgetEntered: 0
+      budgetEntered: false
     }
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -21,7 +21,7 @@ class App extends Component {
   }
 
   handleSubmit(e) {
-    this.setState({ budgetEntered: 1 });
+    this.setState({ budgetEntered: true });
     console.log(this.state);
 
   }
