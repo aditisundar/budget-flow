@@ -59,38 +59,61 @@ def bot_backend():
     fc.load_default()
     return fc.google_bot_json()
 
+# returns an array of numbers for all users with certain category
+@app.route("/<salary>/<location>/<category>")
+def returnBudgetArray(salary, location, category):
+    test_nessie_id = '5b72dc8f322fa06b67793bb8'
+
+    ## individualDictionary contains a dictionary of filtered budgetProfiles
+    wholeArray = parseCSV(int(salary), str(location), data_csv())
+    numArray = [];
+
+    for individual in json.loads(wholeArray) :
+        ## change the 0 to category when categoryArray is a dictionary
+        numArray.append(individual["categoryArray"][0])
+
+    return json.dumps(numArray)
+
 
 # test endpoint to make a get request to card and user information
-@app.route("/test")
-def test():
-    return requests.post("http://www.mocky.io/v2/5b75c6932e00006200536216").text
+@app.route("/generateBudget", methods=['POST'])
+def generateBudget() :
+    parameters = request.get_json()
+    income = parameters["income"]
+    location = parameters["location"]
+
+    dataArray = json.loads(getFC(income, location))
+    ## now cardDataArray has all of the cards, we just want key value pairs
+    budgets = {}
+
+    for item in dataArray :
+        name = item["name"]
+        value = item["budgetted"]
+        budgets[name] = value
+
+    return json.dumps(budgets)
+
+
+def getFC(income, location):
+
+    # if(parameters["income"]) :
+    #     income = parameters["income"]
+    # if(parameters["location"]) :
+    #     location = parameters["location"]
+    test_nessie_id = '5b72dc8f322fa06b67793bb8'
+
+    fc = FlowChart(test_nessie_id, income, location, True)
+    fc.load_default()
+    return fc.google_bot_json()
 
 # actual endpoint to get correct values for the above values
 @app.route("/generate", methods=['POST'])
 def generate() :
     parameters = request.get_json()
-    income = parameters["income"]
-    location = parameters["location"]
-
-
-    ## individualDictionary contains a dictionary of filtered budgetProfiles
-    return parseCSV(income, str(location), data_csv())
+    return null
 
     ## return the individualDictionary in json form
     # return json.dumps(individualDictionary)
-
-
-## function to take in income and location from dialogflow, budgetArray from
-## the server
-def fillDialogFlow(income, location, budgetArray) :
-    toReturn = {}
-    str = "Hey whats up, your income is " + income
-    str += ", your location is " + location
-    str += ", and "
-    for category, value in budgetArray.items() :
-        str += category + " - " + value
-    toReturn["fulfillmentText"] = str
-    return toReturn
 
 # endpoint for dialogflow, POST request
 @app.route("/dialogFlow", methods=['POST'])
@@ -99,16 +122,18 @@ def webhook():
     data = request.get_json()
     data = data["queryResult"]["parameters"]
 
+    testZipCode = "94016"
     # get card data from this server
-    server_data = test()
-    cardDataArray = json.loads(server_data)["cards"]
+    server_data = getFC(5000, testZipCode)
+
+    dataArray = json.loads(server_data)
 
     ## now cardDataArray has all of the cards, we just want key value pairs
     budgets = {}
 
-    for card in cardDataArray :
-        name = card["cardName"]
-        value = card["cardExpense"]
+    for item in dataArray :
+        name = item["name"]
+        value = item["budgetted"]
         budgets[name] = value
 
     ## now budgets has the key value pairs
@@ -118,8 +143,22 @@ def webhook():
         "location": data["location"],
         "budgets": budgets
     }
-    toReturn = fillDialogFlow(input["income"], input["location"], input["budgets"])
 
+    income = input["income"]
+    location = input["location"]
+
+    toReturn = {}
+    message = "Hey whats up, your income is " + income
+    message += ", your location is " + location
+    message += ". You should budget: "
+    for category, value in budgets.items() :
+        message += str(value) + " for " + category + ", "
+
+    message = message[:-2]
+
+    toReturn["fulfillmentText"] = message
+
+    #
     return json.dumps(toReturn)
 
 
